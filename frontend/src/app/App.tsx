@@ -252,25 +252,84 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
   }
 };
 
-  const handleNaturalFoodSearch = (query: string) => {
-    setIsScanning(true);
-    setTimeout(() => {
-      setIsScanning(false);
-      const searchKey = query.toLowerCase();
-      const result = mockNaturalFoodData[searchKey] || {
-        name: query.charAt(0).toUpperCase() + query.slice(1),
-        nutrients: ["Vitamins", "Minerals", "Fiber", "Antioxidants"],
-        benefits: [
-          "Natural source of nutrients",
-          "Supports overall health",
-          "Low in processed ingredients",
-          "Part of a balanced diet",
+  const handleNaturalFoodSearch = async (query: string) => {
+  setIsScanning(true);
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: "You are a nutrition expert.",
+          },
+          {
+            role: "user",
+            content: `
+Give health analysis for this food: ${query}
+
+Return ONLY JSON:
+{
+  "name": "",
+  "nutrients": ["", "", ""],
+  "benefits": ["", "", ""]
+}
+`,
+          },
         ],
-      };
-      setCurrentNaturalResult(result);
-      setShowNaturalResult(true);
-    }, 2000);
-  };
+        temperature: 0.3,
+      }),
+    });
+
+    const data = await response.json();
+
+    const rawText = data.choices?.[0]?.message?.content || "{}";
+
+    const cleaned = rawText.replace(/```json|```/g, "").trim();
+
+    let parsed;
+
+    try {
+  parsed = JSON.parse(cleaned);
+} catch {
+  parsed = {};
+}
+
+// ✅ ENSURE SAFE STRUCTURE
+parsed = {
+  name: parsed.name || query,
+  nutrients: Array.isArray(parsed.nutrients)
+    ? parsed.nutrients
+    : ["Vitamins", "Minerals", "Fiber"],
+  benefits: Array.isArray(parsed.benefits)
+    ? parsed.benefits
+    : ["Supports overall health"],
+};
+
+    setCurrentNaturalResult(parsed);
+    setShowNaturalResult(true);
+
+  } catch (error) {
+    console.error("Natural food AI error:", error);
+
+    // fallback
+    setCurrentNaturalResult({
+  name: query,
+  nutrients: ["Vitamins", "Minerals", "Fiber"],
+  benefits: ["Supports overall health"],
+});
+
+    setShowNaturalResult(true);
+  } finally {
+    setIsScanning(false);
+  }
+};
 
   const analyzeIngredients = (text: string) => {
   const foundIngredients: any[] = [];
