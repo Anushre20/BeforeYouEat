@@ -16,7 +16,9 @@ export function ScanningOverlay() {
       >
         <Loader2 className="w-12 h-12 text-green-500 animate-spin mx-auto mb-4" />
         <p className="text-lg font-semibold text-gray-900">Analyzing...</p>
-        <p className="text-sm text-gray-600 mt-2">Processing ingredients with AI</p>
+        <p className="text-sm text-gray-600 mt-2">
+  Reading label → Understanding ingredients → Calculating health score...
+</p>
       </motion.div>
     </motion.div>
   );

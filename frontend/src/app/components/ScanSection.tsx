@@ -1,16 +1,18 @@
 import { Camera, Scan } from "lucide-react";
 import { motion } from "motion/react";
 import { useRef, useState } from "react";
+import { Html5Qrcode } from "html5-qrcode";
 
 interface ScanSectionProps {
-  onScanIngredients: () => void;
-  onScanBarcode: () => void;
+  onScanIngredients: (file: File | Blob) => void;
+  onScanBarcode: (barcode: string) => void;
 }
 
 export function ScanSection({ onScanIngredients, onScanBarcode }: ScanSectionProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showOptions, setShowOptions] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
 const videoRef = useRef<HTMLVideoElement>(null);
 const streamRef = useRef<MediaStream | null>(null);
   const handleIngredientClick = () => {
@@ -52,16 +54,48 @@ const handleCapture = () => {
   console.log("Image captured");
 
   // trigger existing flow
-  onScanIngredients();
+  canvas.toBlob((blob) => {
+  if (blob) {
+    onScanIngredients(blob);
+  }
+}, "image/jpeg");
 };
 
 const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];
   if (file) {
     console.log("Selected file:", file);
-    onScanIngredients(); // existing logic trigger
+    onScanIngredients(file); // existing logic trigger
   }
 };
+
+const handleBarcodeScan = () => {
+  setShowBarcodeScanner(true);
+
+  setTimeout(() => {
+    const scanner = new Html5Qrcode("barcode-reader");
+
+    scanner.start(
+      { facingMode: "environment" },
+      {
+        fps: 10,
+        qrbox: 250,
+      },
+      (decodedText) => {
+        console.log("Barcode detected:", decodedText);
+
+        scanner.stop();
+        setShowBarcodeScanner(false);
+
+        onScanBarcode(decodedText); // existing logic
+      },
+      (error) => {
+        // ignore errors
+      }
+    );
+  }, 300);
+};
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 mx-4 mb-4">
       <div className="space-y-3">
@@ -76,7 +110,7 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         </motion.button>
 
         <motion.button
-          onClick={onScanBarcode}
+          onClick={handleBarcodeScan}
           className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-4 px-6 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-shadow"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -146,6 +180,20 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setShowCamera(false);
       }}
       className="mt-2 text-white"
+    >
+      Cancel
+    </button>
+
+  </div>
+)}
+{showBarcodeScanner && (
+  <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-50">
+    
+    <div id="barcode-reader" className="w-full max-w-md" />
+
+    <button
+      onClick={() => setShowBarcodeScanner(false)}
+      className="mt-4 text-white"
     >
       Cancel
     </button>

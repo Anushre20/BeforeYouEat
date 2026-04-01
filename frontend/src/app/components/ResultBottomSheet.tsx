@@ -53,6 +53,9 @@ export function ResultBottomSheet({ isOpen, onClose, result }: ResultBottomSheet
               <div>
                 <h2 className="font-bold text-lg text-gray-900">{result.productName}</h2>
                 <p className="text-xs text-gray-500">AI Analysis</p>
+                <p className="text-xs text-gray-400">
+  Personalized health analysis
+</p>
               </div>
               <button
                 onClick={onClose}
@@ -94,7 +97,11 @@ export function ResultBottomSheet({ isOpen, onClose, result }: ResultBottomSheet
                 <div className="mb-4">
                   <BetterChoiceSuggestion suggestion={result.betterChoice} />
                 </div>
-
+                    {(result as any).extractedIngredients && (
+  <p className="text-xs text-gray-400 mt-4">
+    Extracted: {(result as any).extractedIngredients.slice(0, 120)}...
+  </p>
+)}
                 {/* Footer */}
                 <p className="text-xs text-center text-gray-500 mt-6">
                   AI-based analysis. For awareness purposes only.
