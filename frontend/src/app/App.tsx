@@ -82,52 +82,19 @@ const generateInsight = (ingredients: any[], userType: string) => {
 };
 
 const analyzeWithAI = async (text: string) => {
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch("http://localhost:5000/analyze", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
     },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "You are a food safety expert.",
-        },
-        {
-          role: "user",
-          content: `
-Extract ingredients and analyze them.
-
-Text:
-${text}
-
-Return ONLY valid JSON:
-[
-  {
-    "name": "",
-    "risk": "safe | moderate | harmful",
-    "explanation": ""
-  }
-]
-`,
-        },
-      ],
-      temperature: 0.2,
-    }),
+    body: JSON.stringify({ text }),
   });
 
   const data = await response.json();
 
-  const rawText = data.choices?.[0]?.message?.content || "[]";
-
-  const cleaned = rawText.replace(/```json|```/g, "").trim();
-
   try {
-    return JSON.parse(cleaned);
-  } catch (error) {
-    console.log("AI parsing failed:", cleaned);
+    return JSON.parse(data.result);
+  } catch {
     return [];
   }
 };
@@ -178,7 +145,10 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
   ingredients: formattedIngredients,
   warnings,
   insight,
-  betterChoice: "Try a product with fewer additives or natural ingredients.",
+  betterChoice: `Consider reducing intake of ${formattedIngredients
+  .filter((i: any) => i.risk !== "safe")
+  .map((i: any) => i.name)
+  .join(", ")}`,
   extractedIngredients: extractedText,
 });
 
@@ -333,14 +303,15 @@ parsed = {
 
   const analyzeIngredients = (text: string) => {
   const foundIngredients: any[] = [];
-
   const lowerText = text.toLowerCase();
 
   Object.keys(ingredientData).forEach((key) => {
-    if (lowerText.includes(key)) {
+    const regex = new RegExp(`\\b${key}\\b`, "i");
+if (regex.test(lowerText)){
       foundIngredients.push({
         name: key,
-        ...ingredientData[key],
+        risk: ingredientData[key].risk,
+        explanation: ingredientData[key].reason,
       });
     }
   });
