@@ -20,7 +20,6 @@ export default function App() {
   const [currentProductResult, setCurrentProductResult] = useState<any>(null);
   const [showNoProductModal, setShowNoProductModal] = useState(false);
   const [currentNaturalResult, setCurrentNaturalResult] = useState<any>(null);
-  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
   const calculateHealthScore = (ingredients: any[]) => {
   let score = 100;
 
@@ -82,7 +81,7 @@ const generateInsight = (ingredients: any[], userType: string) => {
 };
 
 const analyzeWithAI = async (text: string) => {
-  const response = await fetch("http://localhost:5000/analyze", {
+  const response = await fetch("http://localhost:5001/analyze", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -226,76 +225,39 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
   setIsScanning(true);
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("http://localhost:5001/natural-food", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: "You are a nutrition expert.",
-          },
-          {
-            role: "user",
-            content: `
-Give health analysis for this food: ${query}
-
-Return ONLY JSON:
-{
-  "name": "",
-  "nutrients": ["", "", ""],
-  "benefits": ["", "", ""]
-}
-`,
-          },
-        ],
-        temperature: 0.3,
-      }),
+      body: JSON.stringify({ query }),
     });
 
     const data = await response.json();
-
-    const rawText = data.choices?.[0]?.message?.content || "{}";
-
-    const cleaned = rawText.replace(/```json|```/g, "").trim();
-
-    let parsed;
-
-    try {
-  parsed = JSON.parse(cleaned);
-} catch {
-  parsed = {};
+    if (!data.result) {
+  setCurrentNaturalResult({
+    name: query,
+    nutrients: [],
+    benefits: ["No data found"],
+  });
+} else {
+  setCurrentNaturalResult(data.result);
 }
 
-// ✅ ENSURE SAFE STRUCTURE
-parsed = {
-  name: parsed.name || query,
-  nutrients: Array.isArray(parsed.nutrients)
-    ? parsed.nutrients
-    : ["Vitamins", "Minerals", "Fiber"],
-  benefits: Array.isArray(parsed.benefits)
-    ? parsed.benefits
-    : ["Supports overall health"],
-};
-
-    setCurrentNaturalResult(parsed);
-    setShowNaturalResult(true);
+setShowNaturalResult(true);
 
   } catch (error) {
-    console.error("Natural food AI error:", error);
+    console.error("Backend natural food error:", error);
 
     // fallback
     setCurrentNaturalResult({
   name: query,
-  nutrients: ["Vitamins", "Minerals", "Fiber"],
-  benefits: ["Supports overall health"],
+  nutrients: [],
+  benefits: ["Could not fetch real data"],
 });
 
     setShowNaturalResult(true);
+
   } finally {
     setIsScanning(false);
   }

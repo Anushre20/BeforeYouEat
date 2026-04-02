@@ -1,9 +1,15 @@
 import { motion, AnimatePresence } from "motion/react";
 import { X, Sparkles } from "lucide-react";
 
+interface Nutrient {
+  name: string;
+  amount: string;
+  percentage: string;
+}
+
 interface NaturalFoodData {
   name: string;
-  nutrients: string[];
+  nutrients: Nutrient[];
   benefits: string[];
 }
 
@@ -60,14 +66,19 @@ export function NaturalFoodResult({ isOpen, onClose, result }: NaturalFoodResult
                     <span className="text-lg">🌟</span> Key Nutrients
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {(result.nutrients || []).map((nutrient, index) => (
-                      <div
-                        key={index}
-                        className="bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-sm text-gray-700"
-                      >
-                        {nutrient}
-                      </div>
-                    ))}
+                    {(result.nutrients || []).map((nutrient: any, index: number) => (
+  <div
+    key={index}
+    className="bg-white border border-gray-200 rounded-lg px-4 py-3"
+  >
+    <p className="font-semibold text-gray-900">
+      {nutrient.name}
+    </p>
+    <p className="text-sm text-gray-600">
+      {nutrient.amount} • {nutrient.percentage}
+    </p>
+  </div>
+))}
                   </div>
                 </div>
 

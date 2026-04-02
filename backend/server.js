@@ -1,28 +1,15 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import http from "http";
+console.log("🚀 Backend booting...");
 dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = 5001;
 
 // ✅ CORS (VERY IMPORTANT - place at top)
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
-
-// ✅ HANDLE PREFLIGHT REQUESTS MANUALLY
-app.options("/analyze", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.sendStatus(200);
-});
+app.use(cors());
 
 app.use(express.json());
 
@@ -66,20 +53,121 @@ Return ONLY JSON array:
     const raw = data.choices?.[0]?.message?.content || "[]";
     const cleaned = raw.replace(/```json|```/g, "").trim();
 
-    // ✅ VERY IMPORTANT: send CORS header in response also
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+    
 
     res.json({ result: cleaned });
 
   } catch (error) {
     console.error(error);
 
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
 
     res.status(500).json({ error: "AI failed" });
   }
 });
 
-app.listen(PORT, () => {
+app.post("/natural-food", async (req, res) => {
+    const { query } = req.body;
+    
+    console.log("🔥 API HIT:", req.body);
+    console.log("Searching for:", query);
+
+  try {
+    // 🔍 STEP 1: Search food
+    const searchRes = await fetch(
+      `https://api.nal.usda.gov/fdc/v1/foods/search?query=${query}&api_key=${process.env.USDA_API_KEY}`
+    );
+
+    const searchData = await searchRes.json();
+
+console.log("Search Data:", searchData);
+    const food = searchData.foods?.[0];
+
+    if (!food) {
+      return res.json({ result: null });
+    }
+
+    // 🔍 STEP 2: Get detailed nutrients
+    const detailRes = await fetch(
+      `https://api.nal.usda.gov/fdc/v1/food/${food.fdcId}?api_key=${process.env.USDA_API_KEY}`
+    );
+
+    const detailData = await detailRes.json();
+
+    const nutrients = detailData.foodNutrients || [];
+
+    // 🎯 Extract key nutrients
+    const important = [
+      "Energy",
+      "Protein",
+      "Carbohydrate",
+      "Total lipid (fat)",
+      "Fiber",
+      "Sugars",
+      "Calcium",
+      "Iron",
+      "Potassium",
+    ];
+
+    const formattedNutrients = nutrients
+      .filter((n) =>
+        important.some((imp) =>
+          n.nutrient?.name?.toLowerCase().includes(imp.toLowerCase())
+        )
+      )
+      .slice(0, 6)
+      .map((n) => ({
+        name: n.nutrient.name,
+        amount: `${n.amount} ${n.nutrient.unitName}`,
+        percentage: "-", // optional for now
+      }));
+
+    // 🤖 OPTIONAL: AI for benefits only
+    let benefits = [];
+
+    try {
+      const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "user",
+              content: `Give 3 health benefits of ${query} in short bullet points`,
+            },
+          ],
+        }),
+      });
+
+      const aiData = await aiRes.json();
+      const text = aiData.choices?.[0]?.message?.content || "";
+
+      benefits = text.split("\n").filter(Boolean);
+    } catch {
+      benefits = ["Healthy and nutritious food"];
+    }
+
+    
+
+res.json({
+  result: {
+    name: query,
+    nutrients: formattedNutrients,
+    benefits,
+  },
+});
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch real data" });
+  }
+});
+
+const server = http.createServer(app);
+
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
