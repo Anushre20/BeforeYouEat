@@ -87,6 +87,30 @@ export function ResultBottomSheet({ isOpen, onClose, result }: ResultBottomSheet
                     ))}
                   </div>
                 </div>
+                  
+                  {/* Extracted Ingredients */}
+{(result as any).extractedIngredients && (
+  <div className="mb-6">
+    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+      <span className="text-lg">🧾</span> Extracted Ingredients
+    </h3>
+
+    <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-wrap gap-2">
+      {(result as any).extractedIngredients
+        .split(/,|\(|\)/)
+        .map((item: string) => item.trim())
+        .filter((item: string) => item.length > 2)
+        .map((item: string, index: number) => (
+          <span
+            key={index}
+            className="bg-green-50 border border-green-100 text-gray-700 text-xs px-3 py-1 rounded-full"
+          >
+            {item}
+          </span>
+        ))}
+    </div>
+  </div>
+)}
 
                 {/* Awareness Insight */}
                 <div className="mb-4">
@@ -97,11 +121,7 @@ export function ResultBottomSheet({ isOpen, onClose, result }: ResultBottomSheet
                 <div className="mb-4">
                   <BetterChoiceSuggestion suggestion={result.betterChoice} />
                 </div>
-                    {(result as any).extractedIngredients && (
-  <p className="text-xs text-gray-400 mt-4">
-    Extracted: {(result as any).extractedIngredients.slice(0, 120)}...
-  </p>
-)}
+                    
                 {/* Footer */}
                 <p className="text-xs text-center text-gray-500 mt-6">
                   AI-based analysis. For awareness purposes only.

@@ -25,7 +25,7 @@ export default function App() {
   let score = 100;
 
   ingredients.forEach((item) => {
-    if (item.risk === "harmful") score -= 20;
+    if (item.risk === "harmful") score -= 25;
     else if (item.risk === "moderate") score -= 10;
   });
 
@@ -36,21 +36,22 @@ const generateWarnings = (ingredients: any[], userType: string) => {
   const warnings: string[] = [];
 
   ingredients.forEach((item) => {
+    const key = item.name.toLowerCase().trim();
+    const data = ingredientData[key];
+
+    // ✅ General risk warning
     if (item.risk === "harmful") {
       warnings.push(`${item.name} may be harmful`);
     }
 
-    // PERSONALIZATION LOGIC
-    if (item.name.includes("sugar") && userType === "Diabetic") {
-      warnings.push("High sugar is not suitable for diabetics");
-    }
+    // ✅ Personalized warning (NEW)
+    if (data?.userImpact) {
+      const userKey = userType.toLowerCase(); // child, diabetic, adult, gym
+      const message = data.userImpact[userKey];
 
-    if (item.name.includes("salt") && userType === "Adult") {
-      warnings.push("High sodium may affect blood pressure");
-    }
-
-    if (item.name.includes("ins211") && userType === "Child") {
-      warnings.push("Not recommended for children (hyperactivity risk)");
+      if (message) {
+        warnings.push(message);
+      }
     }
   });
 
@@ -122,15 +123,12 @@ if (!analyzed || analyzed.length === 0) {
   analyzed = analyzeIngredients(extractedText); // fallback
 }
 console.log("AI Result:", analyzed);
+console.log("AI COUNT:", analyzed.length);
+console.log("AI FULL:", analyzed);
     const formattedIngredients = analyzed.map((item: any) => ({
   name: item.name,
-  risk:
-    item.risk === "high"
-      ? "harmful"
-      : item.risk === "medium"
-      ? "moderate"
-      : "safe",
-  explanation: item.reason,
+  risk: item.risk,
+  explanation: item.explanation,
 }));
 const healthScore = calculateHealthScore(formattedIngredients);
 const warnings = generateWarnings(formattedIngredients, selectedUserType);
@@ -188,15 +186,10 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
     let analyzed = analyzeIngredients(ingredientsText);
 
     const formattedIngredients = analyzed.map((item: any) => ({
-      name: item.name,
-      risk:
-        item.risk === "high"
-          ? "harmful"
-          : item.risk === "medium"
-          ? "moderate"
-          : "safe",
-      explanation: item.reason,
-    }));
+  name: item.name,
+  risk: item.risk,
+  explanation: item.explanation,
+}));
 
     const healthScore = calculateHealthScore(formattedIngredients);
     const warnings = generateWarnings(formattedIngredients, selectedUserType);

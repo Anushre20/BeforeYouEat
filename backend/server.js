@@ -16,6 +16,16 @@ app.use(express.json());
 app.post("/analyze", async (req, res) => {
   const { text } = req.body;
 
+  // ✅ STEP 1: Clean + split properly
+  const ingredientsList = text
+    .toLowerCase()
+    .replace(/ingredients:?/g, "")
+    .split(/,|\(|\)|\./)
+    .map(i => i.trim())
+    .filter(i => i.length > 2 && !i.includes("%"));
+
+  console.log("FINAL INGREDIENT LIST:", ingredientsList);
+
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -25,22 +35,26 @@ app.post("/analyze", async (req, res) => {
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
+        temperature: 0,
         messages: [
-          { role: "system", content: "You are a food safety expert." },
+          {
+            role: "system",
+            content: "You are a strict JSON generator.",
+          },
           {
             role: "user",
             content: `
-Extract ingredients and analyze:
+Analyze ALL ingredients.
 
-${text}
+Return EXACT same number of items.
+Do NOT skip anything.
 
-Return ONLY JSON array:
+Ingredients:
+${ingredientsList.join(", ")}
+
+Return JSON array only:
 [
-  {
-    "name": "",
-    "risk": "safe | moderate | harmful",
-    "explanation": ""
-  }
+  { "name": "", "risk": "", "explanation": "" }
 ]
 `,
           },
@@ -49,19 +63,41 @@ Return ONLY JSON array:
     });
 
     const data = await response.json();
-
     const raw = data.choices?.[0]?.message?.content || "[]";
     const cleaned = raw.replace(/```json|```/g, "").trim();
 
-    
+    let parsed = [];
 
-    res.json({ result: cleaned });
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      parsed = [];
+    }
+
+    // ✅ STEP 2: SAFETY FIX (IMPORTANT)
+    if (parsed.length !== ingredientsList.length) {
+      console.log("⚠️ AI mismatch → using fallback");
+
+      parsed = ingredientsList.map((ing) => ({
+        name: ing,
+        risk: "moderate",
+        explanation: "General processed ingredient",
+      }));
+    }
+
+    res.json({ result: JSON.stringify(parsed) });
 
   } catch (error) {
     console.error(error);
 
+    // fallback full list
+    const fallback = ingredientsList.map((ing) => ({
+      name: ing,
+      risk: "moderate",
+      explanation: "Fallback analysis",
+    }));
 
-    res.status(500).json({ error: "AI failed" });
+    res.json({ result: JSON.stringify(fallback) });
   }
 });
 

@@ -12,17 +12,23 @@ export function IngredientCard({ name, risk, explanation }: IngredientCardProps)
   const [isExpanded, setIsExpanded] = useState(false);
 
   const getRiskStyle = () => {
-    switch (risk) {
-      case "safe":
-        return { bg: "bg-green-50", text: "text-green-700", badge: "bg-green-500" };
-      case "moderate":
-        return { bg: "bg-orange-50", text: "text-orange-700", badge: "bg-orange-500" };
-      case "harmful":
-        return { bg: "bg-red-50", text: "text-red-700", badge: "bg-red-500" };
-    }
-  };
+  switch (risk) {
+    case "safe":
+      return { bg: "bg-green-50", text: "text-green-700", badge: "bg-green-500" };
+    case "moderate":
+      return { bg: "bg-orange-50", text: "text-orange-700", badge: "bg-orange-500" };
+    case "harmful":
+      return { bg: "bg-red-50", text: "text-red-700", badge: "bg-red-500" };
+    default:
+      return { bg: "bg-gray-50", text: "text-gray-700", badge: "bg-gray-500" }; // ✅ fallback
+  }
+};
 
-  const style = getRiskStyle();
+  const style = getRiskStyle() || {
+  bg: "bg-gray-50",
+  text: "text-gray-700",
+  badge: "bg-gray-500",
+};
 
   return (
     <motion.div
