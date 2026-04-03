@@ -10,7 +10,7 @@ import { InfoModal } from "./components/InfoModal";
 import { mockProductData, mockNaturalFoodData } from "./data/mockData";
 import Tesseract from "tesseract.js";
 import { ingredientData } from "./data/ingredientData";
-
+import { naturalFoodBenefits } from "./data/naturalFoodBenefits";
 export default function App() {
   const [selectedUserType, setSelectedUserType] = useState("Adult");
   const [isScanning, setIsScanning] = useState(false);
@@ -228,14 +228,20 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
     });
 
     const data = await response.json();
-    if (!data.result) {
+    const name = query.toLowerCase().trim();
+const benefitsFromData = naturalFoodBenefits[name];
+
+if (!data.result) {
   setCurrentNaturalResult({
     name: query,
     nutrients: [],
-    benefits: ["No data found"],
+    benefits: benefitsFromData || ["No data found"],
   });
 } else {
-  setCurrentNaturalResult(data.result);
+  setCurrentNaturalResult({
+    ...data.result,
+    benefits: benefitsFromData || data.result.benefits || ["No data available"],
+  });
 }
 
 setShowNaturalResult(true);
