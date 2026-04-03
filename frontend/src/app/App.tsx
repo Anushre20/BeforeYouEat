@@ -20,6 +20,7 @@ export default function App() {
   const [currentProductResult, setCurrentProductResult] = useState<any>(null);
   const [showNoProductModal, setShowNoProductModal] = useState(false);
   const [currentNaturalResult, setCurrentNaturalResult] = useState<any>(null);
+  const API_URL = import.meta.env.VITE_API_URL;
   const calculateHealthScore = (ingredients: any[]) => {
   let score = 100;
 
@@ -81,7 +82,7 @@ const generateInsight = (ingredients: any[], userType: string) => {
 };
 
 const analyzeWithAI = async (text: string) => {
-  const response = await fetch("http://localhost:5001/analyze", {
+  const response = await fetch(`${API_URL}/analyze`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -225,7 +226,7 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
   setIsScanning(true);
 
   try {
-    const response = await fetch("http://localhost:5001/natural-food", {
+    const response = await fetch(`${API_URL}/natural-food`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

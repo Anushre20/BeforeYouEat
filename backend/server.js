@@ -6,7 +6,7 @@ console.log("🚀 Backend booting...");
 dotenv.config();
 
 const app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
 // ✅ CORS (VERY IMPORTANT - place at top)
 app.use(cors());
