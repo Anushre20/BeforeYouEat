@@ -19,6 +19,7 @@ interface ProductResult {
   warnings: string[];
   insight: string;
   betterChoice: string;
+  scoreReasons?: string[];
 }
 
 interface ResultBottomSheetProps {
@@ -88,6 +89,24 @@ export function ResultBottomSheet({ isOpen, onClose, result }: ResultBottomSheet
                   </div>
                 </div>
                   
+                  {result.scoreReasons && result.scoreReasons.length > 0 && (
+  <div className="mb-4">
+    <h3 className="font-semibold text-gray-900 mb-2">
+      ⚠️ Why this score?
+    </h3>
+
+    <div className="space-y-2">
+      {result.scoreReasons.map((reason, index) => (
+        <div
+          key={index}
+          className="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 text-sm text-yellow-800"
+        >
+          • {reason}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
                   {/* Extracted Ingredients */}
 {(result as any).extractedIngredients && (
   <div className="mb-6">

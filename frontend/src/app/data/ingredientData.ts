@@ -4,6 +4,8 @@ export const ingredientData: any = {
   "sugar": {
     risk: "harmful",
     reason: "Linked to obesity and diabetes",
+    weight: 10,
+    category: "sugar",
     userImpact: {
       child: "May cause hyperactivity",
       diabetic: "Highly dangerous – spikes sugar",
@@ -15,6 +17,8 @@ export const ingredientData: any = {
   "glucose": {
     risk: "moderate",
     reason: "Fast sugar spike",
+    weight: 8,
+    category: "sugar",
     userImpact: {
       child: "Energy spikes",
       diabetic: "Avoid – raises sugar quickly",
@@ -27,6 +31,8 @@ export const ingredientData: any = {
   "salt": {
     risk: "moderate",
     reason: "High sodium increases BP",
+    weight: 6,
+    category: "sodium",
     userImpact: {
       child: "May affect kidneys",
       diabetic: "Risk of BP issues",
@@ -39,6 +45,8 @@ export const ingredientData: any = {
   "maida": {
     risk: "harmful",
     reason: "Highly refined, low fiber",
+    weight: 9,
+    category: "carb",
     userImpact: {
       child: "Low nutrition",
       diabetic: "Spikes sugar levels",
@@ -50,6 +58,8 @@ export const ingredientData: any = {
   "wheat flour": {
     risk: "moderate",
     reason: "Refined carbs",
+    weight: 5,
+    category: "carb",
     userImpact: {
       child: "Energy source",
       diabetic: "Moderate intake only",
@@ -62,6 +72,8 @@ export const ingredientData: any = {
   "palm oil": {
     risk: "moderate",
     reason: "High saturated fat",
+    weight: 7,
+    category: "fat",
     userImpact: {
       child: "Affects heart health",
       diabetic: "Increases cholesterol risk",
@@ -73,6 +85,8 @@ export const ingredientData: any = {
   "hydrogenated oil": {
     risk: "harmful",
     reason: "Contains trans fats",
+    weight: 10,
+    category: "fat",
     userImpact: {
       child: "Very harmful",
       diabetic: "High heart risk",
@@ -85,6 +99,8 @@ export const ingredientData: any = {
   "ins211": {
     risk: "harmful",
     reason: "Linked to hyperactivity",
+    weight: 9,
+    category: "preservative",
     userImpact: {
       child: "Hyperactivity risk",
       diabetic: "Moderate concern",
@@ -96,6 +112,8 @@ export const ingredientData: any = {
   "ins250": {
     risk: "harmful",
     reason: "May form carcinogens",
+    weight: 10,
+    category: "preservative",
     userImpact: {
       child: "Avoid",
       diabetic: "Unsafe",
@@ -108,6 +126,8 @@ export const ingredientData: any = {
   "ins102": {
     risk: "harmful",
     reason: "Artificial color",
+    weight: 8,
+    category: "color",
     userImpact: {
       child: "Allergy risk",
       diabetic: "No major effect",
@@ -120,6 +140,8 @@ export const ingredientData: any = {
   "cocoa solids": {
     risk: "safe",
     reason: "Rich in antioxidants",
+    weight: 1,
+    category: "natural",
     userImpact: {
       child: "Healthy in moderation",
       diabetic: "Good if unsweetened",
@@ -132,6 +154,8 @@ export const ingredientData: any = {
   "milk solids": {
     risk: "safe",
     reason: "Protein source",
+    weight: 2,
+    category: "natural",
     userImpact: {
       child: "Good for growth",
       diabetic: "Safe",
@@ -144,6 +168,8 @@ export const ingredientData: any = {
   "msg": {
     risk: "moderate",
     reason: "May cause headaches",
+    weight: 6,
+    category: "additive",
     userImpact: {
       child: "Avoid",
       diabetic: "Safe in small amount",
@@ -156,6 +182,8 @@ export const ingredientData: any = {
   "potato": {
     risk: "safe",
     reason: "Natural carbohydrate",
+    weight: 2,
+    category: "natural",
     userImpact: {
       child: "Energy source",
       diabetic: "Moderation needed",
@@ -168,6 +196,8 @@ export const ingredientData: any = {
 "sodium benzoate": {
   risk: "harmful",
   reason: "May form benzene",
+  weight: 9,
+  category: "preservative",
   userImpact: {
     child: "Hyperactivity risk",
     diabetic: "Safe in small amounts",
@@ -178,6 +208,8 @@ export const ingredientData: any = {
 "potassium sorbate": {
   risk: "moderate",
   reason: "May irritate skin",
+  weight: 6,
+  category: "preservative",
   userImpact: {
     child: "Mild irritation",
     diabetic: "Safe",
@@ -188,6 +220,8 @@ export const ingredientData: any = {
 "ins202": {
   risk: "moderate",
   reason: "Common preservative",
+  weight: 6,
+  category: "preservative",
   userImpact: {
     child: "Generally safe",
     diabetic: "Safe",
@@ -200,6 +234,8 @@ export const ingredientData: any = {
 "ins110": {
   risk: "harmful",
   reason: "Artificial dye linked to hyperactivity",
+  weight: 8,
+  category: "color",
   userImpact: {
     child: "Avoid",
     diabetic: "No major impact",
@@ -210,6 +246,8 @@ export const ingredientData: any = {
 "ins122": {
   risk: "harmful",
   reason: "Synthetic color",
+  weight: 8,
+  category: "color",
   userImpact: {
     child: "Allergy risk",
     diabetic: "Neutral",
@@ -220,6 +258,8 @@ export const ingredientData: any = {
 "ins133": {
   risk: "moderate",
   reason: "Artificial blue dye",
+  weight: 7,
+  category: "color",
   userImpact: {
     child: "May cause allergies",
     diabetic: "Safe",
@@ -232,6 +272,8 @@ export const ingredientData: any = {
 "yeast": {
   risk: "safe",
   reason: "Natural fermentation agent",
+  weight: 2,
+  category: "natural",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -242,6 +284,8 @@ export const ingredientData: any = {
 "baking soda": {
   risk: "safe",
   reason: "Leavening agent",
+  weight: 4,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -252,6 +296,8 @@ export const ingredientData: any = {
 "baking powder": {
   risk: "moderate",
   reason: "Contains additives",
+  weight: 4,
+  category: "additive",
   userImpact: {
     child: "Safe in small amounts",
     diabetic: "Safe",
@@ -264,6 +310,8 @@ export const ingredientData: any = {
 "flavouring agents": {
   risk: "moderate",
   reason: "Artificial compounds",
+  weight: 6,
+  category: "additive",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Safe",
@@ -274,6 +322,8 @@ export const ingredientData: any = {
 "spices": {
   risk: "safe",
   reason: "Natural ingredients",
+  weight: 2,
+  category: "natural",
   userImpact: {
     child: "Safe",
     diabetic: "Good",
@@ -284,6 +334,8 @@ export const ingredientData: any = {
 "chilli powder": {
   risk: "safe",
   reason: "Natural spice",
+  weight: 2,
+  category: "natural",
   userImpact: {
     child: "May irritate",
     diabetic: "Safe",
@@ -296,6 +348,8 @@ export const ingredientData: any = {
 "carbon dioxide": {
   risk: "safe",
   reason: "Carbonation agent",
+  weight: 3,
+  category: "neutral",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -306,6 +360,8 @@ export const ingredientData: any = {
 "phosphoric acid": {
   risk: "moderate",
   reason: "May weaken bones",
+  weight: 8,
+  category: "additive",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Safe",
@@ -316,6 +372,8 @@ export const ingredientData: any = {
 "caffeine": {
   risk: "moderate",
   reason: "Stimulant",
+  weight: 5,
+  category: "additive",
   userImpact: {
     child: "Avoid",
     diabetic: "Safe",
@@ -328,6 +386,8 @@ export const ingredientData: any = {
 "emulsifier": {
   risk: "moderate",
   reason: "Improves texture",
+  weight: 6,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -338,6 +398,8 @@ export const ingredientData: any = {
 "soy lecithin": {
   risk: "moderate",
   reason: "May cause allergy",
+  weight: 4,
+  category: "additive",
   userImpact: {
     child: "Check allergy",
     diabetic: "Safe",
@@ -348,6 +410,8 @@ export const ingredientData: any = {
 "vanillin": {
   risk: "moderate",
   reason: "Artificial flavor",
+  weight: 6,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -360,6 +424,8 @@ export const ingredientData: any = {
 "stabilizer": {
   risk: "moderate",
   reason: "Improves shelf life",
+  weight: 6,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -370,6 +436,8 @@ export const ingredientData: any = {
 "thickener": {
   risk: "safe",
   reason: "Food texture agent",
+  weight: 6,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -382,6 +450,8 @@ export const ingredientData: any = {
 "acesulfame potassium": {
   risk: "moderate",
   reason: "Artificial sweetener",
+  weight: 7,
+  category: "sugar",
   userImpact: {
     child: "Avoid",
     diabetic: "Used in sugar-free",
@@ -392,6 +462,8 @@ export const ingredientData: any = {
 "saccharin": {
   risk: "moderate",
   reason: "Artificial sweetener",
+  weight: 7,
+  category: "sugar",
   userImpact: {
     child: "Avoid",
     diabetic: "Used in diet foods",
@@ -404,6 +476,8 @@ export const ingredientData: any = {
 "nitrates": {
   risk: "harmful",
   reason: "Linked to cancer risk",
+  weight: 9,
+  category: "preservative",
   userImpact: {
     child: "Avoid",
     diabetic: "Avoid",
@@ -414,6 +488,8 @@ export const ingredientData: any = {
 "nitrites": {
   risk: "harmful",
   reason: "Forms harmful compounds",
+  weight: 10,
+  category: "preservative",
   userImpact: {
     child: "Avoid",
     diabetic: "Avoid",
@@ -426,6 +502,8 @@ export const ingredientData: any = {
 "trans fat": {
   risk: "harmful",
   reason: "Increases bad cholesterol",
+  weight: 10,
+  category: "fat",
   userImpact: {
     child: "Very harmful",
     diabetic: "Heart risk",
@@ -436,6 +514,8 @@ export const ingredientData: any = {
 "saturated fat": {
   risk: "moderate",
   reason: "Raises cholesterol",
+  weight: 7,
+  category: "fat",
   userImpact: {
     child: "Moderate",
     diabetic: "Limit",
@@ -448,6 +528,8 @@ export const ingredientData: any = {
 "ins300": {
   risk: "safe",
   reason: "Vitamin C antioxidant",
+  weight: 2,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -458,6 +540,8 @@ export const ingredientData: any = {
 "ins322": {
   risk: "safe",
   reason: "Natural emulsifier",
+  weight: 3,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -468,6 +552,8 @@ export const ingredientData: any = {
 "ins330": {
   risk: "safe",
   reason: "Citric acid from fruits",
+  weight: 3,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -478,6 +564,8 @@ export const ingredientData: any = {
 "ins331": {
   risk: "safe",
   reason: "Buffering agent",
+  weight: 3,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -488,6 +576,8 @@ export const ingredientData: any = {
 "ins407": {
   risk: "moderate",
   reason: "May cause gut inflammation",
+  weight: 7,
+  category: "additive",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Moderate",
@@ -498,6 +588,8 @@ export const ingredientData: any = {
 "ins466": {
   risk: "moderate",
   reason: "Processed stabilizer",
+  weight: 7,
+  category: "additive",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Safe",
@@ -510,6 +602,8 @@ export const ingredientData: any = {
 "invert sugar": {
   risk: "harmful",
   reason: "High sugar content",
+  weight: 9,
+  category: "sugar",
   userImpact: {
     child: "Hyperactivity",
     diabetic: "Avoid",
@@ -520,6 +614,8 @@ export const ingredientData: any = {
 "malt extract": {
   risk: "moderate",
   reason: "High sugar derivative",
+  weight: 6,
+  category: "sugar",
   userImpact: {
     child: "Energy spike",
     diabetic: "Avoid",
@@ -530,6 +626,8 @@ export const ingredientData: any = {
 "raising agents": {
   risk: "moderate",
   reason: "Chemical leavening",
+  weight: 4,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -542,6 +640,8 @@ export const ingredientData: any = {
 "edible vegetable oil": {
   risk: "moderate",
   reason: "Highly processed",
+  weight: 5,
+  category: "fat",
   userImpact: {
     child: "Moderate",
     diabetic: "Limit",
@@ -552,6 +652,8 @@ export const ingredientData: any = {
 "seasoning": {
   risk: "moderate",
   reason: "Contains additives",
+  weight: 5,
+  category: "additive",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Safe",
@@ -562,6 +664,8 @@ export const ingredientData: any = {
 "cheese powder": {
   risk: "moderate",
   reason: "Processed dairy",
+  weight: 7,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Moderate",
@@ -574,6 +678,8 @@ export const ingredientData: any = {
 "liquid glucose": {
   risk: "harmful",
   reason: "High sugar syrup",
+  weight: 9,
+  category: "sugar",
   userImpact: {
     child: "Hyperactivity",
     diabetic: "Avoid",
@@ -584,6 +690,8 @@ export const ingredientData: any = {
 "corn syrup": {
   risk: "harmful",
   reason: "High fructose",
+  weight: 10,
+  category: "sugar",
   userImpact: {
     child: "Hyperactivity",
     diabetic: "Dangerous",
@@ -596,6 +704,8 @@ export const ingredientData: any = {
 "added sugar": {
   risk: "harmful",
   reason: "Excess sugar intake",
+  weight: 10,
+  category: "sugar",
   userImpact: {
     child: "Hyperactivity",
     diabetic: "Avoid",
@@ -606,6 +716,8 @@ export const ingredientData: any = {
 "fruit concentrate": {
   risk: "moderate",
   reason: "High natural sugar",
+  weight: 7,
+  category: "sugar",
   userImpact: {
     child: "Safe",
     diabetic: "Moderate",
@@ -617,6 +729,8 @@ export const ingredientData: any = {
 // 🧂 COMMON LABEL WORDS (VERY IMPORTANT FOR MATCHING)
 "acidity regulator": {
   risk: "moderate",
+  weight: 6,
+  category: "additive",
   reason: "Chemical regulator",
   userImpact: {
     child: "Safe",
@@ -628,6 +742,8 @@ export const ingredientData: any = {
 "antioxidant": {
   risk: "safe",
   reason: "Prevents oxidation",
+  weight: 3,
+  category: "additive",
   userImpact: {
     child: "Safe",
     diabetic: "Good",
@@ -638,6 +754,8 @@ export const ingredientData: any = {
 "preservative": {
   risk: "moderate",
   reason: "Extends shelf life",
+  weight: 6,
+  category: "preservative",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Safe",
@@ -650,6 +768,8 @@ export const ingredientData: any = {
 "besan": {
   risk: "safe",
   reason: "Protein rich flour",
+  weight: 3,
+  category: "natural",
   userImpact: {
     child: "Healthy",
     diabetic: "Good",
@@ -660,6 +780,8 @@ export const ingredientData: any = {
 "rava": {
   risk: "moderate",
   reason: "Refined wheat",
+  weight: 4,
+  category: "carb",
   userImpact: {
     child: "Energy source",
     diabetic: "Moderate",
@@ -670,6 +792,8 @@ export const ingredientData: any = {
 "poha": {
   risk: "safe",
   reason: "Light carb",
+  weight: 3,
+  category: "natural",
   userImpact: {
     child: "Healthy",
     diabetic: "Moderate",
@@ -682,6 +806,8 @@ export const ingredientData: any = {
 "flavour": {
   risk: "moderate",
   reason: "Artificial flavor",
+  weight: 5,
+  category: "additive",
   userImpact: {
     child: "Avoid excess",
     diabetic: "Safe",
@@ -692,6 +818,8 @@ export const ingredientData: any = {
 "natural flavour": {
   risk: "safe",
   reason: "Derived from natural sources",
+  weight: 3,
+  category: "natural",
   userImpact: {
     child: "Safe",
     diabetic: "Safe",
@@ -702,6 +830,8 @@ export const ingredientData: any = {
 "artificial colour": {
   risk: "harmful",
   reason: "Synthetic dye",
+  weight: 8,
+  category: "color",
   userImpact: {
     child: "Avoid",
     diabetic: "Safe",

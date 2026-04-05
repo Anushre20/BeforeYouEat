@@ -25,12 +25,127 @@ export default function App() {
   const calculateHealthScore = (ingredients: any[]) => {
   let score = 100;
 
-  ingredients.forEach((item) => {
-    if (item.risk === "harmful") score -= 25;
-    else if (item.risk === "moderate") score -= 10;
+  ingredients.forEach((item, index) => {
+    const key = item.name.toLowerCase().trim();
+    const data = ingredientData[key];
+
+    // 🔹 Base weight
+    let weight = data?.weight || 5;
+
+    // 🔹 Risk multiplier
+    let riskFactor = 1;
+    if (item.risk === "harmful") riskFactor = 2;
+    else if (item.risk === "moderate") riskFactor = 1.2;
+
+    // 🔹 Position factor (TOP ingredients matter more)
+    let positionFactor = 1;
+    if (index < 3) positionFactor = 1.6;
+    else if (index < 6) positionFactor = 1.3;
+
+    // 🔹 Category-based penalty
+    let categoryFactor = 1;
+    const category = data?.category;
+
+    if (category === "sugar") categoryFactor = 1.5;
+    if (category === "fat") categoryFactor = 1.3;
+    if (category === "preservative") categoryFactor = 1.4;
+    if (category === "color") categoryFactor = 1.2;
+
+    // 🔹 USER PERSONALIZATION 🔥
+    if (selectedUserType === "Diabetic" && category === "sugar") {
+      categoryFactor *= 1.8;
+    }
+
+    if (selectedUserType === "Child" && category === "additive") {
+      categoryFactor *= 1.5;
+    }
+
+    if (selectedUserType === "Gym" && category === "fat") {
+      categoryFactor *= 1.2;
+    }
+
+    if (selectedUserType === "Adult" && category === "sodium") {
+      categoryFactor *= 1.3;
+    }
+
+    // 🔥 FINAL PENALTY
+    const penalty = weight * riskFactor * positionFactor * categoryFactor;
+
+    score -= penalty;
   });
 
-  return Math.max(score, 0);
+  // 🔹 Clamp result
+  if (score > 95) score = 95; // avoid fake 100
+  if (score < 0) score = 0;
+
+  // 🔥 EXTRA PENALTY: too many harmful ingredients
+const harmfulCount = ingredients.filter(i => i.risk === "harmful").length;
+
+if (harmfulCount >= 3) {
+  score -= 10;
+}
+  return Math.round(score);
+};
+
+const generateScoreReasons = (ingredients: any[]) => {
+  const reasons: string[] = [];
+
+  const topIngredients = ingredients.slice(0, 3);
+
+  // 🔥 CATEGORY COUNTS
+  let sugar = 0, fat = 0, additives = 0, preservatives = 0;
+
+  ingredients.forEach((item) => {
+    const key = item.name.toLowerCase().trim();
+    const data = ingredientData[key];
+
+    if (!data) return;
+
+    if (data.category === "sugar") sugar++;
+    if (data.category === "fat") fat++;
+    if (data.category === "additive") additives++;
+    if (data.category === "preservative") preservatives++;
+  });
+
+  // 🔥 TOP INGREDIENT LOGIC
+  topIngredients.forEach((item) => {
+    const key = item.name.toLowerCase().trim();
+    const data = ingredientData[key];
+
+    if (!data) return;
+
+    if (data.category === "sugar") {
+      reasons.push("High sugar in main ingredients");
+    }
+
+    if (data.category === "fat") {
+      reasons.push("High unhealthy fat content");
+    }
+
+    if (data.category === "carb") {
+      reasons.push("Refined carbs dominate the product");
+    }
+  });
+
+  // 🔥 OVERALL LOGIC
+  if (preservatives >= 2) {
+    reasons.push("Contains multiple preservatives");
+  }
+
+  if (additives >= 3) {
+    reasons.push("Highly processed with additives");
+  }
+
+  if (sugar >= 2) {
+    reasons.push("High overall sugar content");
+  }
+
+  if (fat >= 2) {
+    reasons.push("High fat composition");
+  }
+
+  // REMOVE DUPLICATES
+  return [...new Set(reasons)].slice(0, 3);
 };
 
 const generateWarnings = (ingredients: any[], userType: string) => {
@@ -132,6 +247,7 @@ console.log("AI FULL:", analyzed);
   explanation: item.explanation,
 }));
 const healthScore = calculateHealthScore(formattedIngredients);
+const scoreReasons = generateScoreReasons(formattedIngredients);
 const warnings = generateWarnings(formattedIngredients, selectedUserType);
 const insight = generateInsight(formattedIngredients, selectedUserType);
     console.log("Analyzed Ingredients:", analyzed);
@@ -149,6 +265,7 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
   .map((i: any) => i.name)
   .join(", ")}`,
   extractedIngredients: extractedText,
+  scoreReasons,
 });
 
     setShowProductResult(true);
@@ -193,6 +310,7 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
 }));
 
     const healthScore = calculateHealthScore(formattedIngredients);
+    const scoreReasons = generateScoreReasons(formattedIngredients);
     const warnings = generateWarnings(formattedIngredients, selectedUserType);
     const insight = generateInsight(formattedIngredients, selectedUserType);
 
@@ -204,6 +322,7 @@ const insight = generateInsight(formattedIngredients, selectedUserType);
       insight,
       betterChoice: "Try products with fewer additives.",
       extractedIngredients: ingredientsText,
+      scoreReasons,
     });
 
     setShowProductResult(true);
