@@ -204,6 +204,30 @@ res.json({
 
 const server = http.createServer(app);
 
+app.get("/food-news", async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://gnews.io/api/v4/search?q=food safety india OR FSSAI OR packaged food india&lang=en&country=in&max=10&apikey=${process.env.GNEWS_API_KEY}`
+    );
+
+    const data = await response.json();
+    console.log("News API response:", data);
+    const articles = (data.articles || []).map((item) => ({
+      title: item.title,
+      description: item.description,
+      source: item.source.name,
+      url: item.url,
+      image: item.image,
+    }));
+
+    res.json({ articles });
+
+  } catch (error) {
+    console.error("News API error:", error);
+    res.status(500).json({ articles: [] });
+  }
+});
+
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

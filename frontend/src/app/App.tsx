@@ -11,6 +11,7 @@ import { mockProductData, mockNaturalFoodData } from "./data/mockData";
 import Tesseract from "tesseract.js";
 import { ingredientData } from "./data/ingredientData";
 import { naturalFoodBenefits } from "./data/naturalFoodBenefits";
+import { FoodNewsSection } from "./components/FoodNewsSection";
 export default function App() {
   const [selectedUserType, setSelectedUserType] = useState("Adult");
   const [isScanning, setIsScanning] = useState(false);
@@ -297,11 +298,13 @@ if (regex.test(lowerText)){
 
         <NaturalFoodMode onSearch={handleNaturalFoodSearch} />
 
-        <footer className="text-center py-6 px-4">
-          <p className="text-xs text-gray-500">
-            AI-based analysis. For awareness purposes only.
-          </p>
-        </footer>
+        <FoodNewsSection />
+
+<footer className="text-center py-6 px-4">
+  <p className="text-xs text-gray-500">
+    AI-based analysis. For awareness purposes only.
+  </p>
+</footer>
       </div>
 
       {isScanning && <ScanningOverlay />}
