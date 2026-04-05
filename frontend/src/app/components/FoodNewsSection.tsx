@@ -40,7 +40,7 @@ export function FoodNewsSection({ userType }: { userType: string }) {
       {/* Modal */}
       {selected && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white p-5 rounded-xl w-80 space-y-3">
+          <div className="bg-white p-5 rounded-xl w-80 max-h-[45vh] overflow-y-auto space-y-3">
             <h2 className="font-semibold">{selected.title}</h2>
 
             <p className="text-sm text-gray-600">
