@@ -14,7 +14,7 @@ export function FoodNewsSection({ userType }: { userType: string }) {
   }, []);
 
   return (
-    <div className="px-4 mt-6">
+    <div id="news-section" className="px-4 mt-6">
       <h3 className="font-semibold text-gray-900 mb-3">
         📰 Food Awareness News
       </h3>

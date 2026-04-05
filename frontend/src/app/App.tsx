@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { UserTypeSelector } from "./components/UserTypeSelector";
 import { ScanSection } from "./components/ScanSection";
@@ -12,6 +12,7 @@ import Tesseract from "tesseract.js";
 import { ingredientData } from "./data/ingredientData";
 import { naturalFoodBenefits } from "./data/naturalFoodBenefits";
 import { FoodNewsSection } from "./components/FoodNewsSection";
+import { TourGuide } from "./components/TourGuide";
 export default function App() {
   const [selectedUserType, setSelectedUserType] = useState("Adult");
   const [isScanning, setIsScanning] = useState(false);
@@ -21,6 +22,9 @@ export default function App() {
   const [currentProductResult, setCurrentProductResult] = useState<any>(null);
   const [showNoProductModal, setShowNoProductModal] = useState(false);
   const [currentNaturalResult, setCurrentNaturalResult] = useState<any>(null);
+  const [theme, setTheme] = useState("light");
+  const [showTour, setShowTour] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
   const API_URL = import.meta.env.VITE_API_URL;
   const calculateHealthScore = (ingredients: any[]) => {
   let score = 100;
@@ -400,10 +404,52 @@ if (regex.test(lowerText)){
 
   return foundIngredients;
 };
+
+const steps = [
+  {
+    selector: "#user-type",
+    text: "Select your profile for personalized health results.",
+  },
+  {
+    selector: "#scan-ingredients",
+    text: "Scan ingredients to analyze food safety.",
+  },
+  {
+    selector: "#scan-barcode",
+    text: "Scan barcode for instant product insights.",
+  },
+  {
+    selector: "#natural-food",
+    text: "Check nutrients and benefits of natural foods.",
+  },
+  {
+    selector: "#news-section",
+    text: "Stay updated with food safety news.",
+  },
+];
+
+useEffect(() => {
+  const startTour = () => {
+    setStepIndex(0);
+    setShowTour(true);
+  };
+
+  window.addEventListener("startTour", startTour);
+
+  return () => window.removeEventListener("startTour", startTour);
+}, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50/30 to-blue-50/20">
+    <div className={`${theme === "dark" ? "dark" : ""} min-h-screen 
+bg-gradient-to-br 
+from-white via-green-50/30 to-blue-50/20 
+dark:from-gray-900 dark:via-gray-800 dark:to-gray-900`}>
       <div className="max-w-md mx-auto min-h-screen">
-        <Header onInfoClick={() => setShowInfoModal(true)} />
+        <Header 
+  onInfoClick={() => setShowInfoModal(true)} 
+  theme={theme}
+  setTheme={setTheme}
+/>
         
         <UserTypeSelector
           selectedType={selectedUserType}
@@ -468,6 +514,14 @@ if (regex.test(lowerText)){
     </div>
   </div>
 )}
+
+<TourGuide
+  isOpen={showTour}
+  onClose={() => setShowTour(false)}
+  steps={steps}
+  stepIndex={stepIndex}
+  setStepIndex={setStepIndex}
+/>
     </div>
   );
 }

@@ -9,7 +9,7 @@ const userTypes = ["Adult", "Child", "Diabetic", "Fitness"];
 
 export function UserTypeSelector({ selectedType, onTypeChange }: UserTypeSelectorProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-4 mx-4 mb-4">
+    <div id="user-type" className="dark:bg-gray-800 rounded-2xl shadow-sm p-4 mx-4 mb-4">
       <h3 className="text-sm font-medium text-gray-700 mb-3">I am a/an:</h3>
       <div className="flex flex-wrap gap-2">
         {userTypes.map((type) => (

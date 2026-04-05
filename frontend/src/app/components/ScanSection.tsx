@@ -97,10 +97,11 @@ const handleBarcodeScan = () => {
 };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 mx-4 mb-4">
+    <div className="dark:bg-gray-800 rounded-2xl shadow-md p-6 mx-4 mb-4">
       <div className="space-y-3">
         <motion.button
-          onClick={handleIngredientClick}
+  id="scan-ingredients"
+  onClick={handleIngredientClick}
           className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl py-4 px-6 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-shadow"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -110,7 +111,8 @@ const handleBarcodeScan = () => {
         </motion.button>
 
         <motion.button
-          onClick={handleBarcodeScan}
+  id="scan-barcode"
+  onClick={handleBarcodeScan}
           className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-4 px-6 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-shadow"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -128,7 +130,7 @@ const handleBarcodeScan = () => {
 />
 {showOptions && (
   <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-    <div className="bg-white rounded-2xl p-6 w-80 shadow-xl space-y-4">
+    <div className="dark:bg-gray-800 rounded-2xl p-6 w-80 shadow-xl space-y-4">
       <h2 className="text-lg font-semibold text-center">Choose Option</h2>
 
       <button
