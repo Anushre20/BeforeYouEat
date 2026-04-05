@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-export function FoodNewsSection() {
+export function FoodNewsSection({ userType }: { userType: string }) {
   const [news, setNews] = useState<any[]>([]);
   const [selected, setSelected] = useState<any>(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch(`${API_URL}/food-news`)
+    fetch(`${API_URL}/food-news?type=${userType}`)
       .then(res => res.json())
       .then(data => setNews(data.articles || []))
       .catch(() => setNews([]));

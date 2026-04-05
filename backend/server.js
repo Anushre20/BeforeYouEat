@@ -205,13 +205,27 @@ res.json({
 const server = http.createServer(app);
 
 app.get("/food-news", async (req, res) => {
+  const type = req.query.type || "adult";
+
+  let query = "food safety india";
+
+  if (type.toLowerCase() === "child") {
+    query = "junk food children india OR additives children";
+  } 
+  else if (type.toLowerCase() === "diabetic") {
+    query = "diabetes food india OR sugar health india";
+  } 
+  else if (type.toLowerCase() === "gym") {
+    query = "protein diet india OR fitness nutrition india";
+  }
+
   try {
     const response = await fetch(
-      `https://gnews.io/api/v4/search?q=food safety india OR FSSAI OR packaged food india&lang=en&country=in&max=10&apikey=${process.env.GNEWS_API_KEY}`
+      `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=en&country=in&max=10&apikey=${process.env.GNEWS_API_KEY}`
     );
 
     const data = await response.json();
-    console.log("News API response:", data);
+
     const articles = (data.articles || []).map((item) => ({
       title: item.title,
       description: item.description,

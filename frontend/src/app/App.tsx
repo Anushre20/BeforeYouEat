@@ -298,7 +298,7 @@ if (regex.test(lowerText)){
 
         <NaturalFoodMode onSearch={handleNaturalFoodSearch} />
 
-        <FoodNewsSection />
+        <FoodNewsSection userType={selectedUserType} />
 
 <footer className="text-center py-6 px-4">
   <p className="text-xs text-gray-500">
