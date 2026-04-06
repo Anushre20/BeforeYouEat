@@ -2,7 +2,7 @@
 
 **Know what you eat. Before you eat.**
 
-BeforeYouEat is an AI-powered web app that helps users understand the health impact of packaged and natural foods. It analyzes ingredients, detects harmful additives, and provides real-time nutritional insights.
+BeforeYouEat is an AI-powered web app that helps users understand the health impact of packaged and natural foods. It analyzes ingredients, detects harmful additives, provides personalized health insights, and keeps users informed with real-time food safety news.
 
 ---
 
@@ -10,44 +10,92 @@ BeforeYouEat is an AI-powered web app that helps users understand the health imp
 
 ### 📷 Scan Product Ingredients
 
-* Extracts text using OCR (Tesseract.js)
-* Detects harmful, moderate, and safe ingredients
-* Provides:
-
-  * ⚠️ Health warnings
-  * 📊 Health score
-  * 💡 Personalized insights
+- Extracts text using OCR (Tesseract.js)
+- Splits ingredients intelligently
+- Detects harmful, moderate, and safe ingredients using dataset + AI
+- Provides:
+  - ⚠️ Health warnings
+  - 📊 Smart health score
+  - 🧠 Ingredient breakdown
+  - 💡 Personalized insights
 
 ---
 
 ### 🔍 Scan Product Barcode
 
-* Fetches real product data using OpenFoodFacts API
-* Analyzes ingredient list automatically
+- Fetches real product data using OpenFoodFacts API
+- Automatically extracts and analyzes ingredients
 
 ---
 
 ### 🍎 Natural Food Analysis (USP 🚀)
 
-* Search any food (e.g., apple, rice, banana)
-* Uses **USDA FoodData Central API** for real nutritional data
-* Shows:
+- Search any food (e.g., apple, rice, banana)
+- Uses **USDA FoodData Central API** for real nutritional data
+- Shows:
+  - 🧪 Key nutrients (amount + units)
+  - 💚 Health benefits (dataset + AI fallback)
 
-  * 🧪 Key nutrients (amount + units)
-  * 💚 Health benefits (AI-generated)
+---
+
+### 🧠 Smart Ingredient Intelligence (NEW 🔥)
+
+- Uses **custom local dataset (200+ ingredients + INS codes)**
+- Categorizes ingredients into:
+  - Safe
+  - Moderate
+  - Harmful
+- Includes:
+  - Risk level
+  - Reason
+  - Usage
+  - Avoid recommendations
+
+---
+
+### 📊 Smart Health Score (NEW 🔥)
+
+- Dynamically calculated based on ingredient risks
+- Weighted scoring system
+- Provides realistic product health evaluation
 
 ---
 
 ### 👤 Personalization
 
-* Supports different user types:
+- Supports different user types:
+  - Adult
+  - Child
+  - Diabetic
+  - Fitness
 
-  * Adult
-  * Child
-  * Diabetic
-  * Fitness
+- Generates context-aware warnings:
+  - Sugar → Diabetic warning
+  - Sodium → Blood pressure warning
+  - INS additives → Child safety warning
 
-* Generates tailored warnings and insights
+---
+
+### 📰 Food Awareness News (NEW 🚀)
+
+- Real-time food safety news using **GNews API**
+- Focused on:
+  - FSSAI updates
+  - Food safety issues in India
+  - Ingredient-related risks
+
+- Features:
+  - Horizontal scroll news cards
+  - Click → detailed modal view
+  - Source + article link
+
+---
+
+### 🌙 UI Enhancements
+
+- Dark mode toggle
+- Smooth animations (Framer Motion)
+- Guided "Show Me" walkthrough
 
 ---
 
@@ -55,21 +103,34 @@ BeforeYouEat is an AI-powered web app that helps users understand the health imp
 
 ### Frontend
 
-* React + TypeScript
-* Vite
-* Tailwind CSS
-* Framer Motion
+- React + TypeScript  
+- Vite  
+- Tailwind CSS  
+- Framer Motion  
 
 ### Backend
 
-* Node.js + Express
-* OpenAI API (for ingredient analysis & benefits)
-* USDA FoodData Central API (real nutrition data)
+- Node.js + Express  
+- OpenAI API (AI fallback)  
+- USDA API (nutrition data)  
+- GNews API (food news)  
 
-### Other Tools
+---
 
-* Tesseract.js (OCR)
-* OpenFoodFacts API
+### Data (No Database Used)
+
+- Local structured datasets:
+  - `ingredientData.ts`
+  - `healthBenefitsData.ts`
+
+---
+
+### External APIs
+
+- OpenFoodFacts API → Barcode data  
+- OpenAI API → AI analysis (fallback)  
+- USDA FoodData Central API → Nutrition  
+- GNews API → Food safety news  
 
 ---
 
@@ -126,6 +187,9 @@ npm run dev
 
 * Fetches real nutrition data using USDA API
 
+### GET `/food-news`
+* Fetches real-time food safety news
+* Uses GNews API
 ---
 
 ## 📌 Notes
